@@ -5,12 +5,20 @@ import Link from "next/link";
 import loge from "../../public/logo.jpg";
 
 import { Box, Grid, Paper, TextField, Typography, Button } from "@mui/material";
+import Alert from "@mui/material/Alert";
 
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import { useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState<
+    "success" | "error" | "warning" | "info"
+  >("success");
+  const [errors, setErrors] = useState<RegisterErrors>({});
+  const router = useRouter()
   const [newUser, setNewUser] = useState({
     fullname: "",
     email: "",
@@ -27,16 +35,45 @@ export default function RegisterPage() {
   const handleSubmit = async () => {
     try {
       const { data } = await axios.post("/api/register", newUser);
-      alert(data.message);
+      setSeverity("success");
+      setMessage(data.message || "Compte créé avec succès.");
       setNewUser({
         fullname: "",
         email: "",
         password: "",
         confirmPassword: "",
       });
+
+      setTimeout(() => {
+        router.push("/login")
+      }, 2000);
     } catch (error) {
-      console.log(error);
-      alert("Erreur lors de l'ajout du utilisateur");
+
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data);
+      }
+      console.log(error.response?.data);
+      
+      if (error.response?.status === 400) {
+        const fieldErrors = error.response?.data.error.fieldErrors;
+        console.log("fieldErrors", fieldErrors);
+
+        setErrors(fieldErrors);
+        setSeverity("error");
+        setMessage(
+          fieldErrors.fullname?.[0] ||
+            fieldErrors.email?.[0] ||
+            fieldErrors.password?.[0] ||
+            fieldErrors.confirmPassword?.[0],
+        );
+      } else {
+        setSeverity("error");
+        setMessage("Erreur serveur.");
+      }
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     }
   };
 
@@ -127,6 +164,11 @@ export default function RegisterPage() {
                   OS
                 </Box>
               </Typography>
+              {message && (
+                <Alert severity={severity} sx={{ mb: 2 }}>
+                  {message}
+                </Alert>
+              )}
             </Box>
             <TextField
               name="fullname"
@@ -134,13 +176,18 @@ export default function RegisterPage() {
               label="Full Name"
               margin="normal"
               onChange={handleChange}
+              error={!!errors.fullname}
+              helperText={errors.fullname?.[0]}
             />
             <TextField
               name="email"
               fullWidth
               label="Email"
               margin="normal"
+              value={newUser.email}
               onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email?.[0]}
             />
             <TextField
               name="password"
@@ -148,7 +195,10 @@ export default function RegisterPage() {
               type="password"
               label="Password"
               margin="normal"
+              value={newUser.password}
               onChange={handleChange}
+              error={!!errors.password}
+              helperText={errors.password?.[0]}
             />
             <TextField
               name="confirmPassword"
@@ -156,7 +206,10 @@ export default function RegisterPage() {
               type="password"
               label="Confirm Password"
               margin="normal"
+              value={newUser.confirmPassword}
               onChange={handleChange}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.[0]}
             />
             <Button
               fullWidth

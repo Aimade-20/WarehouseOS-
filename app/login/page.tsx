@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import loge from "../../public/yl-lLIF258nEE_risbwdgQLIASQUwJcHh1Z66ohDCCk6NAZkPIL737DmNS2N_erZbEmz0IezLPbmSaKIOSovkmAuSHOdbsn3rCuX_TA5KT4MRtrtyUXg6GOWAfGb2_LW8fGNF8Lgj_X-jLs7wE1lPKEyMApCB7ZQ35_ocH1f1TSJtJgVsItzuUBvuW9vAYEj.jpg";
+import loge from "../../public/logo.jpg";
 
 import { Box, Grid, Paper, TextField, Typography, Button } from "@mui/material";
+import Alert from "@mui/material/Alert";
 
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import { useState } from "react";
@@ -12,21 +13,37 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState<
+    "success" | "error" | "warning" | "info"
+  >("success");
+  const [errors, setErrors] = useState<RegisterErrors>({});
+
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const handleChange = async () => {
     const result = await signIn("credentials", {
       email: email.trim().toLowerCase(),
       password,
       redirect: false,
     });
-    console.log(result);
+    console.log("result", result);
+
     if (result?.error) {
+      console.log("result", result);
       console.log("Email ou mot de passe incorrect");
+      setSeverity("error");
+      setMessage("Email ou mot de passe incorrect");
       return;
     }
-    router.push("/dashbord");
+    setSeverity("success");
+    setMessage("Connexion réussie.");
+    setTimeout(() =>{
+      router.push("/dashbord");
+    },1500)
   };
   return (
     <Box
@@ -123,6 +140,11 @@ export default function LoginPage() {
                 Welcome Back
               </Typography>
             </Box>
+            {message && (
+              <Alert severity={severity} sx={{ mb: 2 }}>
+                {message}
+              </Alert>
+            )}
             <TextField
               name="email"
               value={email}
