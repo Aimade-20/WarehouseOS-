@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import loge from "../../public/yl-lLIF258nEE_risbwdgQLIASQUwJcHh1Z66ohDCCk6NAZkPIL737DmNS2N_erZbEmz0IezLPbmSaKIOSovkmAuSHOdbsn3rCuX_TA5KT4MRtrtyUXg6GOWAfGb2_LW8fGNF8Lgj_X-jLs7wE1lPKEyMApCB7ZQ35_ocH1f1TSJtJgVsItzuUBvuW9vAYEj.jpg";
+import loge from "../../public/logo.jpg";
 
 import { Box, Grid, Paper, TextField, Typography, Button } from "@mui/material";
 
@@ -18,27 +18,27 @@ export default function RegisterPage() {
     confirmPassword: "",
   });
 
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setNewUser((prev) => ({...prev,[e.target.name]: e.target.value,}));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setNewUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-
   const handleSubmit = async () => {
-      try {
-        const { data } = await axios.post("/api/register", newUser);
-        alert(data.message);
-        setNewUser({
-          fullname: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
-      } catch (error) {
-        console.log(error);
-        alert("Erreur lors de l'ajout du utilisateur");
-      }
-    };
+    try {
+      const { data } = await axios.post("/api/register", newUser);
+      alert(data.message);
+      setNewUser({
+        fullname: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.log(error);
+      alert("Erreur lors de l'ajout du utilisateur");
+    }
+  };
 
   return (
     <Box
