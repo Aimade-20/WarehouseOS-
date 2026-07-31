@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: warehouseos
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/WarehouseOS
+      - NEXTAUTH_SECRET=8f3d2a9c7e1b4f6a9d8c2e5f7b1a3d6e9c4f8a2b7d5e1f9a6c3b8d2e7f1a4c9
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:7
+    container_name: warehouseos-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

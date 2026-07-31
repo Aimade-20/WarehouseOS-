@@ -22,10 +22,10 @@ import { signOut } from "next-auth/react";
 export default function Header() {
   const { data } = useSession();
   console.log(data);
-  const handleLogout  = async () => {
+  const handleLogout = async () => {
     await signOut({
       callbackUrl: "/login",
-    })
+    });
   };
   return (
     <AppBar
@@ -76,12 +76,14 @@ export default function Header() {
                   bgcolor: "#FAFAFA",
                 },
               }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                },
               }}
             />
 
