@@ -18,6 +18,7 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 export default function Header() {
   const { data } = useSession();
@@ -40,24 +41,60 @@ export default function Header() {
         <Toolbar
           disableGutters
           sx={{
-            // height: 10,
             display: "flex",
             justifyContent: "space-between",
           }}
         >
           {/* Left */}
-          <Typography variant="h6" sx={{ color: "black", fontWeight: 700 }}>
-            Warehouse
-            <Box
-              component="span"
-              sx={{
-                color: "#0e5ef3",
+          <Link href="/dashbord">
+            <Typography variant="h6" sx={{ color: "black", fontWeight: 700 }}>
+              Warehouse
+              <Box
+                component="span"
+                sx={{
+                  color: "#4733c0",
+                }}
+              >
+                OS
+              </Box>
+            </Typography>
+          </Link>
+          <Typography sx={{ color: "#4733c0", fontWeight: 700 }}>
+            <Link
+              href="/products"
+              style={{
+                textDecoration: "none",
+                fontWeight: 600,
+                paddingBottom: "6px",
               }}
             >
-              OS
-            </Box>
+              Produits
+            </Link>
           </Typography>
-
+          <Typography sx={{ color: "#4733c0", fontWeight: 700 }}>
+          <Link
+              href="/products"
+              style={{
+                textDecoration: "none",
+                fontWeight: 600,
+                paddingBottom: "6px",
+              }}
+            >
+            Categories
+            </Link>
+          </Typography>
+          <Typography sx={{ color: "#4733c0", fontWeight: 700 }}>
+                        <Link
+              href="/products"
+              style={{
+                textDecoration: "none",
+                fontWeight: 600,
+                paddingBottom: "6px",
+              }}
+            >
+            Mouvements
+            </Link>
+          </Typography>
           {/* Right */}
           <Box
             sx={{
@@ -123,6 +160,8 @@ export default function Header() {
               sx={{
                 textTransform: "none",
                 borderRadius: 2,
+                borderColor: "#4733c0",
+                color: "#4733c0",
               }}
               onClick={handleLogout}
             >

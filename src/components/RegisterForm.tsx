@@ -54,7 +54,7 @@ export default function RegisterForm() {
 
       setTimeout(() => {
         router.push("/login");
-      }, 2000);
+      }, 500);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error) {
